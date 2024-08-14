@@ -24,27 +24,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mkdir('uploads', 0755, true);
     }
 
-    if (move_uploaded_file($photo['tmp_name'], $photoPath)) {
-        // Prepare the SQL statement to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO voters (voters_id, firstname, lastname, username, password, photo, joined) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $voters_id, $firstname, $lastname, $username, $password, $photoPath, $joined);
+    // Check if the voters_id already exists
+    $check_id_sql = "SELECT * FROM voters WHERE voters_id = ?";
+    $check_id_stmt = $conn->prepare($check_id_sql);
+    $check_id_stmt->bind_param("s", $voters_id);
+    $check_id_stmt->execute();
+    $id_result = $check_id_stmt->get_result();
 
-        if ($stmt->execute()) {
-            $_SESSION['message'] = "Registration successful! Please log in.";
-            header("Location: login.php"); // Redirect to login page after registration
-            exit();
-        } else {
-            $_SESSION['message'] = "Error: " . $stmt->error;
-        }
+    // Check if the username (email) already exists
+    $check_username_sql = "SELECT * FROM voters WHERE username = ?";
+    $check_username_stmt = $conn->prepare($check_username_sql);
+    $check_username_stmt->bind_param("s", $username);
+    $check_username_stmt->execute();
+    $username_result = $check_username_stmt->get_result();
+
+    if ($id_result->num_rows > 0) {
+        // Voter ID already exists
+        $_SESSION['message'] = "Error: Voter ID already exists.";
+    } elseif ($username_result->num_rows > 0) {
+        // Username (email) already exists
+        $_SESSION['message'] = "Error: Username (email) already exists.";
     } else {
-        $_SESSION['message'] = "Error uploading file.";
+        // Proceed with the insertion
+        if (move_uploaded_file($photo['tmp_name'], $photoPath)) {
+            // Prepare the SQL statement to prevent SQL injection
+            $stmt = $conn->prepare("INSERT INTO voters (voters_id, firstname, lastname, username, password, photo, joined) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssss", $voters_id, $firstname, $lastname, $username, $password, $photoPath, $joined);
+
+            if ($stmt->execute()) {
+                $_SESSION['message'] = "Registration successful! Please log in.";
+                header("Location: login.php"); // Redirect to login page after registration
+                exit();
+            } else {
+                $_SESSION['message'] = "Error: " . $stmt->error;
+            }
+        } else {
+            $_SESSION['message'] = "Error uploading file.";
+        }
+
+        $stmt->close();
     }
 
-    $stmt->close();
+    $check_id_stmt->close();
+    $check_username_stmt->close();
 }
 
 $conn->close();
 ?>
+
 
 
 <!DOCTYPE html>

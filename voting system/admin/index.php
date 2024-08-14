@@ -108,6 +108,9 @@
     <div class="col-xs-4">
         <button type="button" class="btn btn-primary btn-flat btn-custom" onclick="window.location.href='../login.php'"><i class="fa fa-user"></i> As Voter</button>
     </div>
+<div class="form-group">
+    <a href="../preoverview.php" class="btn btn-secondary btn-block">Back</a>
+</div>
 </div>
 
 

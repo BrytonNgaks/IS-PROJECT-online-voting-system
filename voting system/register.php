@@ -117,6 +117,8 @@ $conn->close();
     </style>
 </head>
 <body>
+
+
     <div class="register-container">
         <div class="card register-card">
             <h2>Register to Vote</h2>
@@ -147,6 +149,9 @@ $conn->close();
                     <input type="file" name="photo" class="form-control-file" accept="image/*" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <div class="form-group">
+    <a href="preoverview.php" class="btn btn-secondary btn-block">Back</a>
+</div>
             </form>
             <?php
             if (isset($_SESSION['message'])) {

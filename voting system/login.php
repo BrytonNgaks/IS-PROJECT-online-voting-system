@@ -102,6 +102,9 @@ $conn->close();
                     <input type="password" name="password" class="form-control" placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <div class="form-group">
+    <a href="preoverview.php" class="btn btn-secondary btn-block">Back</a>
+</div>
             </form>
 
             <?php

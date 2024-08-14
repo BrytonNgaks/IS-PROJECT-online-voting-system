@@ -45,6 +45,9 @@
             <form action="redirect_role.php" method="POST">
                 <button type="submit" name="role" value="voter" class="btn btn-success btn-role">Login as Voter</button>
                 <button type="submit" name="role" value="admin" class="btn btn-primary btn-role">Login as Admin</button>
+                <div class="form-group">
+    <a href="preoverview.php" class="btn btn-secondary btn-block">Back</a>
+</div>
             </form>
         </div>
     </div>
